@@ -24,7 +24,9 @@
                 @change="changeCheckBox(2)"></checkBox>
     </div>
     <div class="demo_item">
-      <selector :items="items" :selectedItems="selectedItems"></selector>
+      <selector :items="selectorItems"
+                :selectedItems="selectedItems"
+                @change="selectItem"></selector>
     </div>
   </div>
 </template>
@@ -91,7 +93,23 @@ const demo = defineComponent({
       }
     ])
     // 下拉选中的数据
-    const selectedItems = reactive([])
+    let selectedItems = reactive([
+      {
+        name: '选项1',
+        value: 1
+      }
+    ])
+
+    /**
+     * @description: 下拉框选中回调
+     * @param {*} items
+     * @return {*}
+     */
+    const selectItem = items => {
+      selectedItems.splice(0,selectedItems.length)
+      selectedItems.push(...items)
+      console.log(items)
+    }
     return {
       isRadioChecked,
       changeRadio,
@@ -99,7 +117,8 @@ const demo = defineComponent({
       isChecked,
       changeCheckBox,
       selectorItems,
-      selectedItems
+      selectedItems,
+      selectItem
     }
   }
 })
