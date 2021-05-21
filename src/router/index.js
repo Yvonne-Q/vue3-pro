@@ -3,16 +3,14 @@
  * @Date: 2021-04-27 11:16:27
  * @LastEditors: Qian.qianchen
  * @Description: 路由配置
- * @FilePath: /yicc-bigscreen/Users/qianqianchen/resource/vue/vue3-pro/src/router/index.js
+ * @FilePath: /vue3-pro/src/router/index.js
  */
 import { createRouter, createWebHashHistory } from 'vue-router'
-import Home from '../views/Home.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    redirect: 'Demo', //重定向
   },
   {
     path: '/about',

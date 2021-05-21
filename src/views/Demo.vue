@@ -3,7 +3,7 @@
  * @Date: 2021-04-27 11:21:36
  * @LastEditors: Qian.qianchen
  * @Description: 组件封装demo
- * @FilePath: /yicc-bigscreen/Users/qianqianchen/resource/vue/vue3-pro/src/views/Demo.vue
+ * @FilePath: /vue3-pro/src/views/Demo.vue
 -->
 <template>
   <div class="demo_container">
@@ -26,6 +26,13 @@
     <div class="demo_item">
       <selector :items="selectorItems"
                 :selectedItems="selectedItems"
+                @change="selectItem"></selector>
+    </div>
+    <div class="demo_item">
+      <selector :items="selectorItems"
+                :selectedItems="selectedMultiItems"
+                :isShowBox="true"
+                :isMulti="true"
                 @change="selectItem"></selector>
     </div>
   </div>
@@ -100,6 +107,8 @@ const demo = defineComponent({
       }
     ])
 
+    let selectedMultiItems = reactive([])
+
     /**
      * @description: 下拉框选中回调
      * @param {*} items
@@ -110,6 +119,7 @@ const demo = defineComponent({
       selectedItems.push(...items)
       console.log(items)
     }
+    
     return {
       isRadioChecked,
       changeRadio,
@@ -118,6 +128,7 @@ const demo = defineComponent({
       changeCheckBox,
       selectorItems,
       selectedItems,
+      selectedMultiItems,
       selectItem
     }
   }

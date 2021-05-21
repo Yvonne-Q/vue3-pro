@@ -3,7 +3,7 @@
  * @Date: 2021-04-28 13:53:21
  * @LastEditors: Qian.qianchen
  * @Description: 多选按钮组件
- * @FilePath: /yicc-bigscreen/Users/qianqianchen/resource/vue/vue3-pro/src/components/checkBox/checkBox.vue
+ * @FilePath: /vue3-pro/src/components/checkBox/checkBox.vue
 -->
 <template>
   <div class="pointer check_box_container"

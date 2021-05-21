@@ -3,7 +3,7 @@
  * @Date: 2021-04-29 13:58:11
  * @LastEditors: Qian.qianchen
  * @Description: 公共方法
- * @FilePath: /yicc-bigscreen/Users/qianqianchen/resource/vue/vue3-pro/src/service/commonService.js
+ * @FilePath: /vue3-pro/src/service/commonService.js
  */
 
 /**
@@ -20,5 +20,5 @@ export const spliceString = (array, property, symbol) => {
   const _str = array.map(_item => {
     return _item[property]
   }).join(symbol)
-  return _str.substring(0, _str.length - symbol.length)
+  return _str
 }

@@ -3,10 +3,11 @@
  * @Date: 2021-04-28 17:32:05
  * @LastEditors: Qian.qianchen
  * @Description: 下拉组件
- * @FilePath: /yicc-bigscreen/Users/qianqianchen/resource/vue/vue3-pro/src/components/selector/selector.vue
+ * @FilePath: /vue3-pro/src/components/selector/selector.vue
 -->
 <template>
-  <div class="selector_container">
+  <div class="selector_container"
+       ref="root">
     <input class="selector_content"
            :placeholder="placeholder"
            readonly
@@ -24,9 +25,13 @@
              v-if="!isShowBox"
              v-text="item[label]"></p>
           <radio v-if="!isMulti&&isShowBox"
-                 :label="item[label]"></radio>
+                 :label="item[label]"
+                 :isChecked="isSelected(item)"
+                 @change="selectItem(item)"></radio>
           <checkBox v-if="isMulti&&isShowBox"
-                    :label="item[label]"></checkBox>
+                    :label="item[label]"
+                    :isChecked="isSelected(item)"
+                    @change="selectItem(item)"></checkBox>
         </li>
       </ul>
     </div>
@@ -87,8 +92,14 @@ const selector = defineComponent({
     let showContent = ref('')
     // 是否展示下拉 默认收起
     const isShow = ref(false)
-
+    // 选中的item列表
     let selectedArray = reactive([])
+    // 根元素
+    const root = ref(null)
+    // 失焦事件
+    const blurEvent = ref(null)
+    // 滚轮滚动事件
+    const scrollEvent = ref(null)
     /**
      * @description: 初始化
      * @param {*}
@@ -140,10 +151,44 @@ const selector = defineComponent({
       emit('change', selectedArray)
       showToggle()
     }
+
+    /**
+     * @description: 监测下拉框失焦事件
+     * @param {*}
+     * @return {*}
+     */
+    const initBlur = () => {
+      let $el = root.value
+      blurEvent.value = function(event) {
+        let $target = event.target
+        if (isShow.value && $target.parentNode !== $el && $target !== $el) {
+          isShow.value = false
+        }
+      }
+      window.addEventListener('click', blurEvent.value)
+    }
+    /**
+     * @description: 监测滚轮滚动事件
+     * @param {*}
+     * @return {*}
+     */
+
+    const initScroll = () => {
+      let $el = root.value
+      scrollEvent.value = function(event) {
+        let $target = event.target
+        if (isShow.value && $target.parentNode !== $el && $target !== $el) {
+          isShow.value = false
+        }
+      }
+      window.addEventListener('scroll', scrollEvent.value)
+    }
     onMounted(() => {
       init()
+      initBlur()
+      initScroll()
     })
-    return { showContent, isShow, showToggle, isSelected, selectItem }
+    return { showContent, isShow, showToggle, isSelected, selectItem, root }
   }
 })
 export default selector
@@ -161,6 +206,9 @@ export default selector
     background-color: white;
     padding: 0 15px;
     box-sizing: border-box;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .selector_list {
     position: absolute;
@@ -173,12 +221,31 @@ export default selector
     background-color: white;
     box-shadow: 0 0 5px #ccc;
     box-sizing: border-box;
+    z-index: 999;
     .list_container {
       .select_item {
         font-size: 14px;
         transition: all 0.5s ease;
         .item_label {
           padding: 8px 15px 8px 30px;
+        }
+        ::v-deep .check_box_container {
+          width: 100%;
+          padding: 8px 15px 8px 30px;
+          box-sizing: border-box;
+        }
+
+        &:hover {
+          background-color: @activeColor;
+          color: white;
+          ::v-deep .check_box_container {
+            .check_box {
+              border-color: white;
+            }
+            .label {
+              color: white;
+            }
+          }
         }
 
         &.active {
@@ -190,15 +257,34 @@ export default selector
               position: absolute;
               top: 50%;
               left: 10px;
-              color: @activeColor;
+              color: transparent;
               transform: translateY(-50%);
             }
           }
-        }
-
-        &:hover {
-          background-color: @activeColor;
-          color: white;
+          ::v-deep .check_box_container {
+            .check_box {
+              border-color: @activeColor;
+            }
+            .label {
+              color: @activeColor;
+            }
+          }
+          &:hover {
+            .item_label {
+              color: white;
+            }
+            ::v-deep .check_box_container {
+              .check_box {
+                border-color: white;
+                &:before {
+                  background-color: white;
+                }
+              }
+              .label {
+                color: white;
+              }
+            }
+          }
         }
       }
     }
